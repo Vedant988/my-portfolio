@@ -9,7 +9,7 @@ export const portfolioContent = {
     // PERSONAL INFORMATION
     // ==========================================
     personal: {
-        name: "Your Name",                    // Your full name
+        name: "Vedant Badukale",                    // Your full name
         tagline: "Python Backend, Computer Vision, GenAI, AI, Edge AI",  // Your main title
         university: "Indian Institute of Information Technology Nagpur", // Updated
         year: "3rd Year",                     // e.g., "3rd Year", "Final Year", "Graduate"

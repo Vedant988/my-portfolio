@@ -99,6 +99,10 @@ def retrieve_context(query: str):
         
     return "\n".join(context)
 
+@app.get("/status")
+async def get_status():
+    return {"system": "operational", "hireable": True}
+
 class Query(BaseModel):
     prompt: str
 

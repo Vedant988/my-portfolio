@@ -10,7 +10,8 @@ const Navbar = () => {
         // Fetch status from backend
         const fetchStatus = async () => {
             try {
-                const response = await fetch('http://localhost:3001/status');
+                const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+                const response = await fetch(`${API_URL}/status`);
                 const data = await response.json();
                 setSystemStatus(data);
                 setIsOnline(true);
