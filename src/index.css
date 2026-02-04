@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neural-black text-white;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+
+  /* Bounding Box Corner Styles */
+  .corner {
+    @apply absolute w-4 h-4 border-cyber-cyan;
+  }
+
+  .corner-tl {
+    @apply top-0 left-0 border-t-2 border-l-2;
+  }
+
+  .corner-tr {
+    @apply top-0 right-0 border-t-2 border-r-2;
+  }
+
+  .corner-bl {
+    @apply bottom-0 left-0 border-b-2 border-l-2;
+  }
+
+  .corner-br {
+    @apply bottom-0 right-0 border-b-2 border-r-2;
+  }
+
+  /* Technical Button Styles */
+  .btn-technical {
+    @apply relative px-6 py-3 bg-transparent border-2 border-cyber-cyan text-cyber-cyan font-mono text-sm uppercase tracking-wider transition-all duration-300 hover:bg-cyber-cyan hover:text-neural-black hover:shadow-lg hover:shadow-cyber-cyan/50 active:scale-95;
+  }
+
+  .btn-technical::before {
+    content: '';
+    @apply absolute inset-0 bg-cyber-cyan opacity-0 transition-opacity duration-300;
+    z-index: -1;
+  }
+
+  .btn-technical:hover::before {
+    @apply opacity-10;
+  }
+}
+
+@layer utilities {
+  .text-shadow-glow {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.3),
+      0 0 30px rgba(255, 255, 255, 0.1);
+  }
+
+  .box-shadow-cyber {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2),
+      0 0 40px rgba(255, 255, 255, 0.1);
+  }
+}
