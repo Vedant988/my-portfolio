@@ -65,10 +65,10 @@ const Projects = () => {
                             </div>
                         ))}
 
-                        {/* "More" Card - Circular 3D Disc */}
+                        {/* "More" Card - Circular 3D Disc (Now Rotator) */}
                         {otherProjects.length > 0 && (
-                            <div className="min-w-[300px] flex items-center justify-center snap-center p-8">
-                                <ArchiveDisc count={otherProjects.length} />
+                            <div className="min-w-[350px] md:min-w-[400px] flex items-center justify-center snap-center p-8">
+                                <ArchiveDisc projects={otherProjects} />
                             </div>
                         )}
                     </div>
