@@ -12,6 +12,36 @@ import TerminalChat from './components/TerminalChat';
 
 function App() {
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [backendStatus, setBackendStatus] = useState('offline'); // 'offline' | 'pinging' | 'online'
+
+    // Wake up the backend on load
+    React.useEffect(() => {
+        const wakeUpBackend = async () => {
+            setBackendStatus('pinging');
+            try {
+                // Use environment variable or fallback to production URL if local is not set, 
+                // but checking localhost by default for dev is safer.
+                // However, user specifically wants to wake Render. 
+                // We'll trust VITE_API_URL is set correctly in .env.
+                const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+                const res = await fetch(`${API_URL}/status`);
+                if (res.ok) {
+                    setBackendStatus('online');
+                } else {
+                    setBackendStatus('offline');
+                }
+            } catch (error) {
+                console.error("Backend wake-up failed:", error);
+                setBackendStatus('offline');
+            }
+        };
+
+        wakeUpBackend();
+
+        // Optional: Keep alive or retry every 30s if offline? 
+        // For now, just one initial wake up as requested.
+    }, []);
 
     return (
         <div className="relative min-h-screen bg-neural-black text-slate-gray font-outfit selection:bg-cyber-cyan/30">
@@ -95,7 +125,7 @@ function App() {
                             >
                                 <X className="w-6 h-6" />
                             </button>
-                            <TerminalChat />
+                            <TerminalChat backendStatus={backendStatus} />
                         </motion.div>
                     </motion.div>
                 )}

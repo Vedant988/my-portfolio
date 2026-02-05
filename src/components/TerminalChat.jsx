@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BoundingBox from './BoundingBox';
 
-const TerminalChat = () => {
+const TerminalChat = ({ backendStatus = 'offline' }) => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
         { type: 'system', text: 'Neural Link Established.' },
@@ -105,13 +105,26 @@ const TerminalChat = () => {
     return (
         <BoundingBox label="TERMINAL_CHAT" className="w-full max-w-4xl mx-auto h-[500px] bg-black border border-gray-800 shadow-lg overflow-hidden flex flex-col font-mono text-sm">
             {/* Terminal Title Bar */}
-            <div className="bg-gray-900/50 p-2 border-b border-gray-800 flex items-center gap-2">
-                <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-zinc-700"></div>
-                    <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
-                    <div className="w-3 h-3 rounded-full bg-zinc-500"></div>
+            <div className="bg-gray-900/50 p-2 border-b border-gray-800 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-zinc-700"></div>
+                        <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
+                        <div className="w-3 h-3 rounded-full bg-zinc-500"></div>
+                    </div>
+                    <span className="ml-2 text-xs text-gray-500">vedant-ai -- bash -- 80x24</span>
                 </div>
-                <span className="ml-2 text-xs text-gray-500">vedant-ai -- bash -- 80x24</span>
+
+                {/* Connection Signal */}
+                <div className="flex items-center gap-2 px-2">
+                    <span className="text-[10px] uppercase tracking-wider text-gray-500 font-bold">
+                        {backendStatus === 'pinging' ? 'INIT' : backendStatus}
+                    </span>
+                    <div className={`w-2.5 h-2.5 rounded-full ${backendStatus === 'online' ? 'bg-green-500 shadow-[0_0_8px_2px_rgba(34,197,94,0.4)]' :
+                        backendStatus === 'pinging' ? 'bg-yellow-500 animate-pulse' :
+                            'bg-red-500'
+                        }`} />
+                </div>
             </div>
 
             {/* Terminal Content */}
