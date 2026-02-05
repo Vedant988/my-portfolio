@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import ProjectCard from './ProjectCard';
 import ArchiveDisc from './ArchiveDisc';
 import { portfolioContent } from '../content';
@@ -49,61 +49,26 @@ const Projects = () => {
                 </div>
 
                 {/* Horizontal Scroll Container */}
-                <div className="relative group/carousel">
-                    {/* Fade gradients - Adjusted for better visibility */}
-                    <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-neural-black to-transparent z-10 pointer-events-none" />
-                    <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-neural-black to-transparent z-10 pointer-events-none" />
-
-                    {/* Mobile Scroll Hint - Animated Bounce Right */}
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 z-20 md:hidden pointer-events-none animate-pulse">
-                        <div className="bg-black/50 backdrop-blur-md p-2 rounded-full border border-white/20 shadow-lg flex flex-col items-center gap-1">
-                            <span className="text-[10px] text-white/80 font-mono tracking-widest writing-vertical-rl rotate-180">SCROLL</span>
-                            {/* Chevron Right */}
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-cyber-cyan animate-bounce-x">
-                                <path d="M9 18l6-6-6-6" />
-                            </svg>
-                        </div>
-                    </div>
+                <div className="relative">
+                    {/* Fade gradients for scroll cues */}
+                    <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-neural-black to-transparent z-10 pointer-events-none md:hidden" />
+                    <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-neural-black to-transparent z-10 pointer-events-none md:hidden" />
 
                     <div
                         ref={scrollRef}
-                        className="flex overflow-x-auto gap-6 pb-12 pt-4 px-6 md:px-0 snap-x snap-mandatory scrollbar-hide md:scrollbar-thin scrollbar-thumb-cyber-cyan/20 scrollbar-track-transparent perspective-1000"
-                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', perspective: '1000px' }}
+                        className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide md:scrollbar-thin scrollbar-thumb-cyber-cyan/20 scrollbar-track-transparent"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
                         {featuredProjects.map((project, idx) => (
-                            <div key={idx} className="min-w-[80vw] md:min-w-[450px] snap-center relative">
-                                {/* Wrapper for 3D Entrance Animation */}
-                                <motion.div
-                                    initial={{ opacity: 0, x: 100, rotateY: -15, z: -50 }}
-                                    whileInView={{ opacity: 1, x: 0, rotateY: 0, z: 0 }}
-                                    viewport={{ once: true, margin: "-10%" }}
-                                    transition={{
-                                        duration: 0.8,
-                                        delay: idx * 0.1,
-                                        ease: "easeOut"
-                                    }}
-                                    className="h-full"
-                                >
-                                    <ProjectCard {...project} index={idx} />
-                                </motion.div>
+                            <div key={idx} className="min-w-[85vw] md:min-w-[450px] snap-center">
+                                <ProjectCard {...project} />
                             </div>
                         ))}
 
                         {/* "More" Card - Circular 3D Disc */}
                         {otherProjects.length > 0 && (
-                            <div className="min-w-[300px] flex items-center justify-center snap-center p-8 relative">
-                                <motion.div
-                                    initial={{ opacity: 0, x: 100, rotateY: -15, z: -50 }}
-                                    whileInView={{ opacity: 1, x: 0, rotateY: 0, z: 0 }}
-                                    viewport={{ once: true, margin: "-10%" }}
-                                    transition={{
-                                        duration: 0.8,
-                                        delay: featuredProjects.length * 0.1, // Delay after all projects
-                                        ease: "easeOut"
-                                    }}
-                                >
-                                    <ArchiveDisc count={otherProjects.length} />
-                                </motion.div>
+                            <div className="min-w-[300px] flex items-center justify-center snap-center p-8">
+                                <ArchiveDisc count={otherProjects.length} />
                             </div>
                         )}
                     </div>
