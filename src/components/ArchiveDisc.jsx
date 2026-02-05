@@ -1,100 +1,81 @@
-import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, FolderOpen, Github, Code } from 'lucide-react';
+import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { ArrowUpRight, ArrowRight } from 'lucide-react';
 
-const ArchiveDisc = ({ projects = [] }) => {
-    // If we have few projects, duplicate them to create a nice ring effect
-    const displayProjects = projects.length < 4
-        ? [...projects, ...projects, ...projects, ...projects].slice(0, 8)
-        : projects;
+const ArchiveDisc = ({ count }) => {
+    const ref = useRef(null);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
 
-    const count = displayProjects.length;
-    const radius = 160; // Distance from center
-    const cardWidth = 140;
+    const mouseXSpring = useSpring(x, { stiffness: 400, damping: 30 });
+    const mouseYSpring = useSpring(y, { stiffness: 400, damping: 30 });
 
-    // Calculate angle per card
-    const angleStep = 360 / count;
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["-25deg", "25deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["25deg", "-25deg"]);
+
+    const handleMouseMove = (e) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        x.set(mouseX / width - 0.5);
+        y.set(mouseY / height - 0.5);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
 
     return (
-        <div className="relative w-[300px] h-[300px] flex items-center justify-center perspective-1000">
-            {/* Rotating Container */}
-            <motion.div
-                className="relative w-full h-full preserve-3d flex items-center justify-center p-10"
-                animate={{ rotateY: 360 }}
-                transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear"
-                }}
-                style={{ transformStyle: "preserve-3d" }}
+        <motion.div
+            ref={ref}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateY,
+                rotateX,
+                transformStyle: "preserve-3d",
+            }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="group relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-neural-black border border-white/10 flex items-center justify-center cursor-pointer"
+        >
+            {/* Spinning Text Ring (Visual Effect) */}
+            <div className="absolute inset-2 rounded-full border border-dashed border-white/5 animate-[spin_10s_linear_infinite] group-hover:border-white/20 transition-colors" />
+            <div className="absolute inset-8 rounded-full border border-white/5 animate-[spin_15s_linear_infinite_reverse]" />
+
+            {/* Inner Content Floating in 3D */}
+            <div
+                className="text-center flex flex-col items-center justify-center"
+                style={{ transform: "translateZ(30px)" }}
             >
-                {/* Central "Core" or Label */}
-                <div className="absolute inset-0 flex items-center justify-center z-10" style={{ transform: "translateZ(0px)" }}>
-                    <div className="w-24 h-24 rounded-full bg-black/80 backdrop-blur-md border border-cyber-cyan/30 flex flex-col items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.2)]">
-                        <FolderOpen className="w-8 h-8 text-cyber-cyan mb-1" />
-                        <span className="text-[10px] font-mono text-white/70 tracking-widest uppercase">Archive</span>
-                        <span className="text-xs font-bold text-white">+{projects.length} More</span>
-                    </div>
+                <div className="text-4xl md:text-5xl font-light text-white mb-2">
+                    +{count}
+                </div>
+                <div className="text-xs font-mono tracking-widest text-gray-400 uppercase group-hover:text-white transition-colors">
+                    Archived Codes
                 </div>
 
-                {/* Orbiting Cards */}
-                {displayProjects.map((project, i) => {
-                    const angle = i * angleStep;
-                    // Calculate position on the circle (simple trigonometry not needed if we use rotateY + translateZ)
+                <motion.div
+                    className="mt-6 w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <ArrowRight className="w-5 h-5" />
+                </motion.div>
+            </div>
 
-                    return (
-                        <div
-                            key={i}
-                            className="absolute flex items-center justify-center"
-                            style={{
-                                transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
-                                transformStyle: "preserve-3d",
-                            }}
-                        >
-                            {/* The Card Itself */}
-                            <div className="w-[140px] h-[180px] bg-black/90 border border-white/10 rounded-xl p-3 flex flex-col justify-between hover:border-cyber-cyan/50 hover:bg-gray-900 transition-all group overflow-hidden shadow-2xl backface-visible">
-                                {/* Top: Tech Icons or decorative */}
-                                <div className="flex justify-between items-start">
-                                    <div className="flex gap-1">
-                                        <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                                        <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                                    </div>
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <ArrowUpRight className="w-4 h-4 text-cyber-cyan" />
-                                    </div>
-                                </div>
-
-                                {/* Content */}
-                                <div>
-                                    <h3 className="text-white text-sm font-bold leading-tight mb-1 line-clamp-2">
-                                        {project.title}
-                                    </h3>
-                                    <p className="text-[10px] text-gray-500 line-clamp-2">
-                                        {project.tech.slice(0, 3).join(" • ")}
-                                    </p>
-                                </div>
-
-                                {/* Bottom: Action / Link */}
-                                <div className="pt-2 border-t border-white/5 flex justify-between items-center">
-                                    <Code className="w-3 h-3 text-gray-600" />
-                                    <a
-                                        href={project.github}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="text-[10px] bg-white/10 hover:bg-cyber-cyan hover:text-black text-white px-2 py-1 rounded transition-colors"
-                                    >
-                                        View
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
-            </motion.div>
-
-            {/* Floor Reflection / Shadow (Optional aesthetic touch) */}
-            <div className="absolute -bottom-12 w-40 h-8 bg-cyber-cyan/20 blur-xl rounded-[100%] opacity-40 animate-pulse" />
-        </div>
+            {/* Hover Glow */}
+            <div
+                className="absolute inset-0 rounded-full pointer-events-none opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-radial-gradient from-white to-transparent"
+                style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%)', transform: "translateZ(10px)" }}
+            />
+        </motion.div>
     );
 };
 
