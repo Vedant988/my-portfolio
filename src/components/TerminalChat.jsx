@@ -28,17 +28,42 @@ const TerminalChat = ({ backendStatus = 'offline' }) => {
             // 1. Add User Command to Log
             setHistory(prev => [...prev, { type: 'user', text: `> ${userCmd}` }]);
 
-            // 2. The "Fake" Loading Sequence (The Visual Flex)
-            const loadingSteps = [
-                `$ pip install vedant-info --upgrade`,
-                `> Resolving dependencies (PyTorch, RAG-Core)...`,
-                `> [RAG] Embedding query vector...`,
-                `> [RAG] Searching knowledge base...`,
-                `> [LLM] Context injected. Generating response...`
+            // 2. Randomized Thinking Loader — picks a unique path each query
+            const ALL_STEPS = [
+                // Routing
+                `> routing query to knowledge index...`,
+                `> classifying intent: [${['skills', 'projects', 'experience', 'bio', 'achievements'][Math.floor(Math.random()*5)]}]`,
+                `> scanning resume corpus...`,
+                // Retrieval
+                `> [RAG] embedding query into vector space...`,
+                `> [RAG] cosine similarity search — top-k=3`,
+                `> [RAG] chunk retrieved: experience.txt (0.91 sim)`,
+                `> [RAG] chunk retrieved: projects.txt (0.88 sim)`,
+                `> [RAG] chunk retrieved: skills.txt (0.85 sim)`,
+                `> [RAG] merging context window (${Math.floor(Math.random()*300+400)} tokens)`,
+                // Model
+                `> [LLM] dispatching to openai/gpt-oss-20b on Groq...`,
+                `> [LLM] injecting system prompt + context...`,
+                `> [LLM] reasoning pass: analyzing ${Math.floor(Math.random()*3+2)} data points`,
+                // Domain-specific hints
+                `> indexing: edge_ai.hailo8 — INT8 PTQ deployment`,
+                `> indexing: internship.tihan_iit_hyderabad — mAP +8.4%`,
+                `> indexing: projects.structurag — surya_ocr + rag_pipeline`,
+                `> indexing: projects.web_automi — react_agent + playwright`,
+                `> indexing: skills.vllm — tensor_parallel, paged_attention`,
+                `> indexing: achievements.ieee_icdsinc_2025 — 97.42% acc`,
+                `> indexing: hackathon.sankalp_bharat — rank #1 / 4000+`,
+                // Output
+                `> compiling response...`,
+                `> stream initializing...`,
             ];
 
+            // Pick 4-5 random unique steps for each query
+            const shuffled = ALL_STEPS.sort(() => Math.random() - 0.5);
+            const loadingSteps = shuffled.slice(0, Math.floor(Math.random() * 2) + 4);
+
             for (const step of loadingSteps) {
-                await new Promise(r => setTimeout(r, 400)); // Delay for effect
+                await new Promise(r => setTimeout(r, Math.floor(Math.random() * 250) + 200));
                 setHistory(prev => [...prev, { type: 'system', text: step }]);
             }
 

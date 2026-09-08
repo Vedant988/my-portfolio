@@ -35,7 +35,7 @@ export const portfolioContent = {
         email: "vedantbadukale@gmail.com",
         github: "https://github.com/Vedant988",
         linkedin: "https://www.linkedin.com/in/vedant-badukale-887704283/",
-        resume: "https://drive.google.com/file/d/1jasdobVVd5RqC3XclozXM4xSHybV2BTL/view?usp=sharing",
+        resume: "https://drive.google.com/file/d/1OjEqT-95RqzOCWyw15jw98gy_evVlRSc/view?usp=sharing",
         portfolio: "https://vedant-portfolio-jade.vercel.app/",
     },
 

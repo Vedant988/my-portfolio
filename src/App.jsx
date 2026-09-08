@@ -51,7 +51,7 @@ function App() {
             {/* Brand / Welcome Text */}
             <div className="absolute top-8 left-8 z-40">
                 <h1 className="text-white/80 font-mono text-xs tracking-[0.3em] uppercase">
-                    Portfolio_v3.0
+                    Portfolio_v4.0
                 </h1>
                 <div className="h-px w-8 bg-white/20 mt-2"></div>
             </div>
