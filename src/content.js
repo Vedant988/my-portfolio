@@ -12,7 +12,7 @@ export const portfolioContent = {
         name: "Vedant Badukale",
         tagline: "AI/ML Engineer • Edge AI • LLMs • Computer Vision",
         university: "Indian Institute of Information Technology Nagpur",
-        year: "3rd Year",
+        year: "4rd Year",
         major: "Electronics & Telecommunications Engineering (IoT)",
 
         // Your introduction paragraph

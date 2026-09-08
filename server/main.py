@@ -8,7 +8,7 @@ import asyncio
 from dotenv import load_dotenv
 
 # 1. Setup
-load_dotenv(dotenv_path="../.env") # Load env from root directory
+load_dotenv()  # Loads .env from the server/ directory (where main.py lives)
 
 app = FastAPI()
 
@@ -148,14 +148,14 @@ async def chat_with_vedant(query: Query):
         print("Sending request to Groq...")
         
         completion = await client.chat.completions.create(
-            model="openai/gpt-oss-20b", 
-                messages=[
+            model="openai/gpt-oss-20b",
+            messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": query.prompt}
             ],
             temperature=0.5,
-            max_tokens=250,
-            stream=True 
+            max_tokens=1024,  # Reasoning model: needs budget for CoT + visible output
+            stream=True
         )
 
         async def response_generator():
