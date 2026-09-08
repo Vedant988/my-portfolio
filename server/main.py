@@ -148,8 +148,8 @@ async def chat_with_vedant(query: Query):
         print("Sending request to Groq...")
         
         completion = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile", # Using a reliable Llama 3 model on Groq
-            messages=[
+            model="openai/gpt-oss-20b", 
+                messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": query.prompt}
             ],
